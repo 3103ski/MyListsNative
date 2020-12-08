@@ -4,7 +4,7 @@ import thunk from 'redux-thunk';
 // import logger from 'redux-logger';
 
 // reducers
-import { app } from './reducers/index';
+import { app, list } from './reducers/index';
 
 // storage
 import { persistCombineReducers, persistStore } from 'redux-persist';
@@ -17,7 +17,7 @@ const config = {
 };
 
 export const ConfigureStore = () => {
-	const store = createStore(persistCombineReducers(config, { app }), applyMiddleware(thunk));
+	const store = createStore(persistCombineReducers(config, { app, list }), applyMiddleware(thunk));
 
 	const persistor = persistStore(store);
 

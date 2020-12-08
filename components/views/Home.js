@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import { Text, View } from 'react-native';
 
+import List from '../List/List';
+
 class Home extends Component {
 	constructor(props) {
 		super(props);
@@ -9,7 +11,7 @@ class Home extends Component {
 	render() {
 		return (
 			<View>
-				<Text>Things are ready.</Text>
+				<List />
 			</View>
 		);
 	}
