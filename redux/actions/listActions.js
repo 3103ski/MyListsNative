@@ -1,11 +1,11 @@
 import * as a from '../actionTypes';
 import { baseUrl } from '../../shared/baseURL';
 
-// lists
-
+//****************************************** */
+// 			FETCHING LISTS
+//****************************************** */
 export const fetchLists = () => (dispatch) => {
 	dispatch(fetchListsStart());
-
 	return fetch(baseUrl + 'lists')
 		.then(
 			(response) => {
@@ -43,7 +43,31 @@ export const fetchListsError = (errorMsg) => ({
 	errorMsg: errorMsg,
 });
 
-// list items
+//****************************************** */
+// 			ADDING / REMOVING LIST
+//****************************************** */
+export const addList = (list) => (dispatch) => {
+	// dispatch(addListStart());
+	dispatch(addListSuccess(list));
+};
+
+export const addListStart = () => ({
+	type: a.ADD_LIST_START,
+});
+
+export const addListSuccess = (list) => ({
+	type: a.ADD_LIST_SUCCESS,
+	list: list,
+});
+
+export const addListError = (errorMsg) => ({
+	type: a.ADD_LIST_ERROR,
+	errorMsg: errorMsg,
+});
+
+//****************************************** */
+// 			ADDING / REMOVING LIST
+//****************************************** */
 export const fetchListItems = (listId) => (dispatch) => {
 	dispatch(fetchListItemsStart);
 	return fetch(baseUrl + `listItems?listId=${listId}`)

@@ -29,18 +29,21 @@ const list = (
 		case a.ADD_LIST_SUCCESS:
 			const newList = { id: randomId(), ...action.list };
 			const updatedLists = state.lists.concat(newList);
+			console.log('in there', updatedLists);
 			return updateObject(state, { isAdding: false, lists: updatedLists });
 		case a.ADD_LIST_ERROR:
 			return updateObject(state, { isAdding: false, errorMsg: action.errorMsg });
 		// ____________
 		// LIST ITEMS
 		// ------------
+		// FETCHING
 		case a.FETCH_LIST_ITEMS_START:
 			return updateObject(state, { isLoadingListItems: true, listItems: [] });
 		case a.FETCH_LIST_ITEMS_SUCCESS:
 			return updateObject(state, { isLoadingListItems: false, listItems: action.listItems });
 		case a.FETCH_LIST_ITEMS_ERROR:
 			return updateObject(state, { isLoadingListItems: false, errorMsg: action.errorMsg });
+		// ADDING
 		case a.ADD_LIST_ITEM_START:
 			return updateObject(state, { isAdding: true });
 		case a.ADD_LIST_ITEM_ERROR:
@@ -49,12 +52,11 @@ const list = (
 			const newListItem = { id: randomId(), ...action.listItem };
 			const updatedListItems = state.listItems.concat(newListItem);
 			return updateObject(state, { isAdding: false, listItems: updatedListItems });
+		// UPDATING
 		case a.TOGGLE_COMPLETE:
-			console.log(action.itemId);
 			const currItems = state.listItems;
 			for (let i in currItems) {
 				if (currItems[i].id == action.itemId) {
-					console.log('match', currItems[i]);
 					currItems[i].isComplete = !currItems[i].isComplete;
 				}
 			}

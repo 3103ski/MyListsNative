@@ -1,5 +1,6 @@
-import React, { Component } from 'react';
-import { FlatList, View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import React, { Component, useState } from 'react';
+import { FlatList, Modal, View, Text, StyleSheet, TouchableOpacity, Button } from 'react-native';
+
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { faSquare, faCheckSquare } from '@fortawesome/free-solid-svg-icons';
 import { connect } from 'react-redux';
@@ -9,27 +10,6 @@ const mapDispatchToProps = {
 	complete: (id) => toggleCompletion(id),
 };
 
-const List = (props) => {
-	const { navigate } = props.navigation;
-
-	const renderListItem = ({ item }) => {
-		if (props.isItems) {
-			return (
-				<TouchableOpacity style={styles.listItemContainer}>
-					<CheckBox itemId={item.id} isComplete={item.isComplete} toggleCompletion={(id) => props.complete(id)} />
-					<Text style={styles.listItemText}>{item.title}</Text>
-				</TouchableOpacity>
-			);
-		} else {
-			return (
-				<TouchableOpacity onPress={() => navigate('ListView', { listId: item.id, list: item })} style={styles.listItemContainer}>
-					<Text style={styles.listItemText}>{item.title}</Text>
-				</TouchableOpacity>
-			);
-		}
-	};
-	return <FlatList contentContainerStyle={styles.listContainer} renderItem={renderListItem} data={props.listData} extraData={props.listItems} keyExtractor={(item) => item.id.toString()} />;
-};
 class CheckBox extends Component {
 	constructor(props) {
 		super(props);
@@ -53,6 +33,31 @@ class CheckBox extends Component {
 		return <FontAwesomeIcon onPress={() => this.toggleButton(this.props.itemId)} mask={['far']} icon={faSquare} size={iconSize} />;
 	}
 }
+
+const List = (props) => {
+	const { navigate } = props.navigation;
+	const renderListItem = ({ item }) => {
+		if (props.isItems) {
+			return (
+				<TouchableOpacity style={styles.listItemContainer}>
+					<CheckBox itemId={item.id} isComplete={item.isComplete} toggleCompletion={(id) => props.complete(id)} />
+					<Text style={styles.listItemText}>{item.title}</Text>
+				</TouchableOpacity>
+			);
+		} else {
+			return (
+				<TouchableOpacity onPress={() => navigate('ListView', { listId: item.id, list: item })} style={styles.listItemContainer}>
+					<Text style={styles.listItemText}>{item.title}</Text>
+				</TouchableOpacity>
+			);
+		}
+	};
+	return (
+		<>
+			<FlatList contentContainerStyle={styles.listContainer} renderItem={renderListItem} data={props.listData} extraData={props.listItems} keyExtractor={(item) => item.id.toString()} />
+		</>
+	);
+};
 
 const styles = StyleSheet.create({
 	listContainer: {
@@ -78,6 +83,19 @@ const styles = StyleSheet.create({
 		fontSize: 18,
 		letterSpacing: 0.3,
 		marginLeft: 10,
+	},
+	addBtnContainer: {
+		justifyContent: 'center',
+		alignItems: 'center',
+		marginTop: 20,
+	},
+	addBtn: {
+		color: 'grey',
+	},
+	modal: {
+		justifyContent: 'center',
+		margin: 20,
+		flex: 1,
 	},
 });
 
