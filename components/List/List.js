@@ -1,27 +1,27 @@
 import React from 'react';
-import { FlatList, View, Text, StyleSheet } from 'react-native';
+import { FlatList, View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { faSquare, faCheckSquare } from '@fortawesome/free-solid-svg-icons';
 
-const DUMDATA = [
-	{ title: 'something', description: 'a bunch of details here', isComplete: false, id: 0 },
-	{ title: 'something', description: 'a bunch of details here', isComplete: true, id: 1 },
-	{ title: 'something', description: 'a bunch of details here', isComplete: false, id: 2 },
-	{ title: 'something', description: 'a bunch of details here', isComplete: true, id: 3 },
-	{ title: 'something', description: 'a bunch of details here', isComplete: false, id: 4 },
-];
-
 const List = (props) => {
+	const { navigate } = props.navigation;
 	const renderListItem = ({ item }) => {
-		console.log(item);
-		return (
-			<View style={styles.listItemContainer}>
-				<FontAwesomeIcon icon={item.isComplete ? faCheckSquare : faSquare} size={27} />
-				<Text style={styles.listItemText}>{item.title}</Text>
-			</View>
-		);
+		if (props.isItems) {
+			return (
+				<View style={styles.listItemContainer}>
+					<FontAwesomeIcon mask={['far']} icon={item.isComplete ? faCheckSquare : faSquare} size={27} />
+					<Text style={styles.listItemText}>{item.title}</Text>
+				</View>
+			);
+		} else {
+			return (
+				<TouchableOpacity onPress={() => navigate('ListView', { listId: item.id, list: item })} style={styles.listItemContainer}>
+					<Text style={styles.listItemText}>{item.title}</Text>
+				</TouchableOpacity>
+			);
+		}
 	};
-	return <FlatList contentContainerStyle={styles.listContainer} renderItem={renderListItem} data={DUMDATA} keyExtractor={(item) => item.id.toString()} />;
+	return <FlatList contentContainerStyle={styles.listContainer} renderItem={renderListItem} data={props.listData} keyExtractor={(item) => item.id.toString()} />;
 };
 
 const styles = StyleSheet.create({

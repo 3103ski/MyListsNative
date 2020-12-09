@@ -11,15 +11,28 @@ import { connect } from 'react-redux';
 // Actions
 
 // View Components
-import Home from './views/Home';
+import AllLists from './views/AllLists';
+import ListView from './views/ListView';
 
 // Components
 
 const mapDispatchToProps = {};
 
-const HomeNavigator = createStackNavigator(
+const AllListsNavigator = createStackNavigator(
 	{
-		Home: { screen: Home },
+		AllLists: {
+			screen: AllLists,
+			navigationOptions: ({ navigation }) => ({
+				headerLeft: <Icon name='list' type='font-awesome' onPress={() => navigation.toggleDrawer()} />,
+				headerTitle: 'All Lists',
+			}),
+		},
+		ListView: {
+			screen: ListView,
+			navigationOptions: ({ navigation }) => ({
+				initialRouteName: 'All Lists',
+			}),
+		},
 	},
 	{
 		defaultNavigationOptions: ({ navigation }) => ({
@@ -30,7 +43,6 @@ const HomeNavigator = createStackNavigator(
 			headerTitleStyle: {
 				color: '#fff',
 			},
-			headerLeft: <Icon name='home' type='font-awesome' iconStyle={styles.stackIcon} onPress={() => navigation.toggleDrawer()} />,
 		}),
 	}
 );
@@ -41,7 +53,7 @@ const CustomDrawerContentComponent = (props) => {
 			<SafeAreaView style={styles.container} forceInset={{ top: 'always', horizontal: 'never' }}>
 				<View style={styles.drawerHeader}>
 					<View style={{ flex: 2 }}>
-						<Text style={styles.drawerHeaderText}>Nav</Text>
+						<Text style={styles.drawerHeaderText}>My Lists App</Text>
 					</View>
 				</View>
 				<DrawerItems {...props} />
@@ -52,10 +64,10 @@ const CustomDrawerContentComponent = (props) => {
 
 const MainNavigator = createDrawerNavigator(
 	{
-		Home: {
-			screen: HomeNavigator,
+		Lists: {
+			screen: AllListsNavigator,
 			navigationOptions: {
-				drawerIcon: ({ tintColor }) => <Icon name='home' type='font-awesome' size={24} color={tintColor} />,
+				drawerIcon: ({ tintColor }) => <Icon name='clipboard' type='font-awesome' size={24} color={tintColor} />,
 			},
 		},
 	},
