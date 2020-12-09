@@ -44,10 +44,8 @@ export const fetchListsError = (errorMsg) => ({
 });
 
 // list items
-
 export const fetchListItems = (listId) => (dispatch) => {
 	dispatch(fetchListItemsStart);
-
 	return fetch(baseUrl + `listItems?listId=${listId}`)
 		.then((response) => {
 			if (response.ok) {
@@ -77,4 +75,9 @@ export const fetchListItemsSuccess = (listItems) => ({
 export const fetchListItemsError = (errorMsg) => ({
 	type: a.FETCH_LIST_ITEMS_ERROR,
 	errorMsg: errorMsg,
+});
+
+export const toggleCompletion = (itemId) => ({
+	type: a.TOGGLE_COMPLETE,
+	itemId: itemId,
 });

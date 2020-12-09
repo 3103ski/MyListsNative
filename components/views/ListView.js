@@ -16,11 +16,11 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = {
 	fetchListItemsInit: (id) => fetchListItems(id),
+	toggleCompletion: (id) => toggleCompletion(id),
 };
 
 const ListView = (props) => {
 	const list = props.navigation.getParam('list');
-	console.log(list);
 	useEffect(() => {
 		props.fetchListItemsInit(list.id);
 	}, []);

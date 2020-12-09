@@ -49,6 +49,16 @@ const list = (
 			const newListItem = { id: randomId(), ...action.listItem };
 			const updatedListItems = state.listItems.concat(newListItem);
 			return updateObject(state, { isAdding: false, listItems: updatedListItems });
+		case a.TOGGLE_COMPLETE:
+			console.log(action.itemId);
+			const currItems = state.listItems;
+			for (let i in currItems) {
+				if (currItems[i].id == action.itemId) {
+					console.log('match', currItems[i]);
+					currItems[i].isComplete = !currItems[i].isComplete;
+				}
+			}
+			return updateObject(state, { listItems: currItems });
 		default:
 			return state;
 	}

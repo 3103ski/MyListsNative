@@ -1,17 +1,24 @@
-import React from 'react';
+import React, { Component } from 'react';
 import { FlatList, View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { faSquare, faCheckSquare } from '@fortawesome/free-solid-svg-icons';
+import { connect } from 'react-redux';
+import { toggleCompletion } from '../../redux/actions/listActions';
+
+const mapDispatchToProps = {
+	complete: (id) => toggleCompletion(id),
+};
 
 const List = (props) => {
 	const { navigate } = props.navigation;
+
 	const renderListItem = ({ item }) => {
 		if (props.isItems) {
 			return (
-				<View style={styles.listItemContainer}>
-					<FontAwesomeIcon mask={['far']} icon={item.isComplete ? faCheckSquare : faSquare} size={27} />
+				<TouchableOpacity style={styles.listItemContainer}>
+					<CheckBox itemId={item.id} isComplete={item.isComplete} toggleCompletion={(id) => props.complete(id)} />
 					<Text style={styles.listItemText}>{item.title}</Text>
-				</View>
+				</TouchableOpacity>
 			);
 		} else {
 			return (
@@ -21,8 +28,31 @@ const List = (props) => {
 			);
 		}
 	};
-	return <FlatList contentContainerStyle={styles.listContainer} renderItem={renderListItem} data={props.listData} keyExtractor={(item) => item.id.toString()} />;
+	return <FlatList contentContainerStyle={styles.listContainer} renderItem={renderListItem} data={props.listData} extraData={props.listItems} keyExtractor={(item) => item.id.toString()} />;
 };
+class CheckBox extends Component {
+	constructor(props) {
+		super(props);
+		this.state = {
+			isComplete: this.props.isComplete,
+		};
+	}
+	toggleButton(itemId) {
+		this.props.toggleCompletion(itemId);
+		return this.setState({
+			...this.state,
+			isComplete: !this.state.isComplete,
+		});
+	}
+
+	render() {
+		let [iconSize] = [27];
+		if (this.state.isComplete) {
+			return <FontAwesomeIcon onPress={() => this.toggleButton(this.props.itemId)} mask={['far']} icon={faCheckSquare} size={iconSize} />;
+		}
+		return <FontAwesomeIcon onPress={() => this.toggleButton(this.props.itemId)} mask={['far']} icon={faSquare} size={iconSize} />;
+	}
+}
 
 const styles = StyleSheet.create({
 	listContainer: {
@@ -51,4 +81,4 @@ const styles = StyleSheet.create({
 	},
 });
 
-export default List;
+export default connect(null, mapDispatchToProps)(List);
