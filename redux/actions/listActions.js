@@ -66,11 +66,11 @@ export const addListError = (errorMsg) => ({
 });
 
 //****************************************** */
-// 			ADDING / REMOVING LIST
+// 			FETCHING LIST ITEMS
 //****************************************** */
-export const fetchListItems = (listId) => (dispatch) => {
+export const fetchListItems = () => (dispatch) => {
 	dispatch(fetchListItemsStart);
-	return fetch(baseUrl + `listItems?listId=${listId}`)
+	return fetch(baseUrl + `listItems`)
 		.then((response) => {
 			if (response.ok) {
 				return response;
@@ -81,26 +81,56 @@ export const fetchListItems = (listId) => (dispatch) => {
 			}
 		})
 		.then((response) => response.json())
-		.then((listItems) => dispatch(fetchListItemsSuccess(listItems)))
+		.then((listItems) => {
+			return dispatch(fetchListItemsSuccess(listItems));
+		})
 		.catch((error) => dispatch(fetchListItemsError(error.message)));
 };
-
 export const fetchListItemsStart = () => {
 	return {
 		type: a.FETCH_LIST_ITEMS_START,
 	};
 };
 
-export const fetchListItemsSuccess = (listItems) => ({
-	type: a.FETCH_LIST_ITEMS_SUCCESS,
-	listItems: listItems,
-});
+export const fetchListItemsSuccess = (listItems) => {
+	console.log(listItems);
+	return {
+		type: a.FETCH_LIST_ITEMS_SUCCESS,
+		listItems: listItems,
+	};
+};
 
 export const fetchListItemsError = (errorMsg) => ({
 	type: a.FETCH_LIST_ITEMS_ERROR,
 	errorMsg: errorMsg,
 });
 
+//****************************************** */
+// 			ADD LIST ITEM
+//****************************************** */
+
+export const addListItem = (listItem) => (dispatch) => {
+	// dispatch(addListItemStart());
+	dispatch(addListItemSuccess(listItem));
+};
+
+export const addListItemStart = () => ({
+	type: a.ADD_LIST_ITEM_START,
+});
+
+export const addListItemSuccess = (listItem) => ({
+	type: a.ADD_LIST_ITEM_SUCCESS,
+	listItem: listItem,
+});
+
+export const addListItemError = (errorMsg) => ({
+	type: a.ADD_LIST_ITEM_ERROR,
+	errorMsg: errorMsg,
+});
+
+//****************************************** */
+// 			TOGGLE ITEM COMPLETION
+//****************************************** */
 export const toggleCompletion = (itemId) => ({
 	type: a.TOGGLE_COMPLETE,
 	itemId: itemId,

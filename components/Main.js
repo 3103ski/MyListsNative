@@ -9,14 +9,17 @@ import SafeAreaView from 'react-native-safe-area-view';
 import { connect } from 'react-redux';
 
 // Actions
-
+import { fetchLists, fetchListItems } from '../redux/actions/listActions';
 // View Components
 import AllLists from './views/AllLists';
 import ListView from './views/ListView';
 
 // Components
 
-const mapDispatchToProps = {};
+const mapDispatchToProps = {
+	fetchLists: () => fetchLists(),
+	fetchItems: () => fetchListItems(),
+};
 
 const AllListsNavigator = createStackNavigator(
 	{
@@ -80,7 +83,16 @@ const MainNavigator = createDrawerNavigator(
 const AppNavigator = createAppContainer(MainNavigator);
 
 class Main extends Component {
-	componentDidMount() {}
+	constructor(props) {
+		super(props);
+		this.state = {};
+	}
+
+	componentDidMount() {
+		this.props.fetchItems();
+		this.props.fetchLists();
+	}
+
 	render() {
 		return (
 			<View

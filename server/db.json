@@ -21,61 +21,71 @@
             "id": 0,
             "listId": 123,
             "title": "apples",
-            "isComplete" : true
+            "isComplete" : true,
+            "description" : "Some words"
         },
         {
             "id": 1,
             "listId": 123,
             "title": "bread",
-            "isComplete" : false
+            "isComplete" : false,
+            "description" : "Some words"
         },
         {
             "id": 2,
             "listId": 123,
             "title": "cereal",
-            "isComplete" : false
+            "isComplete" : false,
+            "description" : "Some words"
         },
         {
             "id": 3,
             "listId": 123,
             "title": "milk",
-            "isComplete" : true
+            "isComplete" : true,
+            "description" : "Some words"
         },
         {
             "id": 4,
             "listId": 234,
             "title": "auto parts store",
-            "isComplete" : false
+            "isComplete" : false,
+            "description" : "Some words"
         },
         {
             "id": 5,
             "listId": 234,
             "title": "stop at the office",
-            "isComplete" : false
+            "isComplete" : false,
+            "description" : "Some words"
         },
         {
             "id": 6,
             "listId": 345,
             "title": "fix the garage door",
-            "isComplete" : true
+            "isComplete" : true,
+            "description" : "Some words"
         },
         {
             "id": 7,
             "listId": 345,
             "title": "make dinner",
-            "isComplete" : false
+            "isComplete" : false,
+            "description" : "Some words"
         },
         {
             "id": 8,
             "listId": 345,
             "title": "change the cat litter",
-            "isComplete" : false
+            "isComplete" : false,
+            "description" : "Some words"
         },
         {
             "id": 9,
             "listId": 345,
             "title": "check the kids' homework",
-            "isComplete" : false
+            "isComplete" : false,
+            "description" : "Some words"
         }
     ]
 }

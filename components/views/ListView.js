@@ -1,11 +1,19 @@
-import React, { Component, useEffect, useState } from 'react';
-import { View, Text } from 'react-native';
-import List from '../List/List';
-import Loading from '../generic/LoadingComponent';
-
+// react
+import React, { Component } from 'react';
+import { Text, View, Modal, Button, StyleSheet } from 'react-native';
+import { Input } from 'react-native-elements';
 import { connect } from 'react-redux';
 
-import { fetchListItems } from '../../redux/actions/listActions';
+// third party
+import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
+import { faPlusCircle } from '@fortawesome/free-solid-svg-icons';
+
+// components
+import Loading from '../generic/LoadingComponent';
+import List from '../List/List';
+
+// actions
+import { addListItem } from '../../redux/actions/listActions';
 
 const mapStateToProps = (state) => {
 	return {
@@ -15,25 +23,107 @@ const mapStateToProps = (state) => {
 };
 
 const mapDispatchToProps = {
-	fetchListItemsInit: (id) => fetchListItems(id),
-	toggleCompletion: (id) => toggleCompletion(id),
+	addItem: (item) => addListItem(item),
 };
 
-const ListView = (props) => {
-	const list = props.navigation.getParam('list');
-	useEffect(() => {
-		props.fetchListItemsInit(list.id);
-	}, []);
+class ListView extends Component {
+	constructor(props) {
+		super(props);
+		this.state = {
+			showModal: false,
+			listId: null,
+			items: this.props.listItems,
+			newListItemTitle: '',
+			newListItemDescription: '',
+		};
+	}
 
-	if (props.isLoading) {
-		return <Loading />;
-	} else {
-		return (
+	toggleModal = () => {
+		return this.setState({
+			...this.state,
+			showModal: !this.state.showModal,
+			newListItemTitle: '',
+			newListItemDescription: '',
+		});
+	};
+
+	getListItems = (listId) => {
+		return this.setState({
+			...this.state,
+			listId: listId,
+			showModal: false,
+		});
+	};
+
+	handleAddListItem = () => {
+		const newItem = {
+			listId: this.state.listId,
+			title: this.state.newListItemTitle,
+			description: this.state.newListItemDescription,
+			isComplete: false,
+		};
+		this.getListItems(this.state.listId);
+		this.props.addItem(newItem);
+	};
+
+	componentDidMount() {
+		const list = this.props.navigation.getParam('list');
+		this.getListItems(list.id);
+	}
+
+	render() {
+		const list = this.props.navigation.getParam('list');
+		return this.props.isLoading ? (
+			<Loading />
+		) : (
 			<View>
-				<List isItems listData={props.listItems} navigation={props.navigation} />
+				{/* LIST */}
+				<List isItems navigation={this.props.navigation} listId={list.id} />
+
+				{/* ADD BUTTON */}
+				<View style={styles.addBtnContainer}>
+					<FontAwesomeIcon onPress={() => this.toggleModal()} style={styles.addBtn} mask={['far']} icon={faPlusCircle} size={50} />
+				</View>
+
+				{/* MODAL */}
+				<Modal animationType={'slide'} transparent={false} visible={this.state.showModal} onRequestClose={() => this.toggleModal()}>
+					<View style={styles.modal}>
+						<Input placeholder='Title' value={this.state.newListItemTitle} onChangeText={(val) => this.setState({ ...this.state, newListItemTitle: val })} />
+						<Input placeholder='Description' value={this.state.newListItemDescription} onChangeText={(val) => this.setState({ ...this.state, newListItemDescription: val })} />
+
+						<View style={{ margin: 15 }}>
+							<Button title='Add Item' color='#5637DD' onPress={() => this.handleAddListItem()} />
+						</View>
+						<View style={{ margin: 15 }}>
+							<Button
+								title='Cancel'
+								onPress={() => {
+									this.toggleModal();
+								}}
+								color='#808080'
+							/>
+						</View>
+					</View>
+				</Modal>
 			</View>
 		);
 	}
-};
+}
+
+const styles = StyleSheet.create({
+	addBtnContainer: {
+		justifyContent: 'center',
+		alignItems: 'center',
+		marginTop: 20,
+	},
+	addBtn: {
+		color: 'grey',
+	},
+	modal: {
+		justifyContent: 'center',
+		margin: 20,
+		flex: 1,
+	},
+});
 
 export default connect(mapStateToProps, mapDispatchToProps)(ListView);
