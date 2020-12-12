@@ -19,6 +19,7 @@ const mapStateToProps = (state) => {
 	return {
 		isLoading: state.list.isLoadingListItems,
 		listItems: state.list.listItems,
+		refresh: state.list.refresh,
 	};
 };
 
@@ -47,7 +48,7 @@ class ListView extends Component {
 		});
 	};
 
-	getListItems = (listId) => {
+	reloadList = (listId) => {
 		return this.setState({
 			...this.state,
 			listId: listId,
@@ -62,13 +63,13 @@ class ListView extends Component {
 			description: this.state.newListItemDescription,
 			isComplete: false,
 		};
-		this.getListItems(this.state.listId);
+		this.reloadList(this.state.listId);
 		this.props.addItem(newItem);
 	};
 
 	componentDidMount() {
 		const list = this.props.navigation.getParam('list');
-		this.getListItems(list.id);
+		this.reloadList(list.id);
 	}
 
 	render() {
@@ -78,7 +79,7 @@ class ListView extends Component {
 		) : (
 			<View>
 				{/* LIST */}
-				<List isItems navigation={this.props.navigation} listId={list.id} />
+				<List listItems={this.props.listItems} isItems navigation={this.props.navigation} listId={list.id} />
 
 				{/* ADD BUTTON */}
 				<View style={styles.addBtnContainer}>

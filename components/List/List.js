@@ -1,74 +1,57 @@
+// React
 import React, { Component, useState } from 'react';
 import { FlatList, Modal, View, Text, StyleSheet, TouchableOpacity } from 'react-native';
-
-import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
-import { faSquare, faCheckSquare } from '@fortawesome/free-solid-svg-icons';
 import { connect } from 'react-redux';
+
+// Components
+import CheckBox from '../generic/CheckBox';
+
+// actions
 import { toggleCompletion } from '../../redux/actions/listActions';
 
 const mapDispatchToProps = {
-	complete: (id) => toggleCompletion(id),
+	// complete: (id) => toggleCompletion(id),
 };
 
 const mapStateToProps = (state) => {
 	return {
 		listItems: state.list.listItems,
+		refresh: state.list.refresh,
 	};
 };
 
-class CheckBox extends Component {
+class List extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			isComplete: this.props.isComplete,
+			items: this.props.listItems,
 		};
 	}
-
-	toggleButton(itemId) {
-		this.props.toggleCompletion(itemId);
-		return this.setState({
-			...this.state,
-			isComplete: !this.state.isComplete,
-		});
-	}
-
-	render() {
-		let [iconSize] = [27];
-		if (this.state.isComplete) {
-			return <FontAwesomeIcon onPress={() => this.toggleButton(this.props.itemId)} mask={['far']} icon={faCheckSquare} size={iconSize} />;
-		}
-		return <FontAwesomeIcon onPress={() => this.toggleButton(this.props.itemId)} mask={['far']} icon={faSquare} size={iconSize} />;
-	}
-}
-
-class List extends Component {
 	render() {
 		const { navigate } = this.props.navigation;
-		const renderListItem = ({ item }) => {
-			if (this.props.isItems) {
-				return (
-					<TouchableOpacity style={styles.listItemContainer}>
-						<CheckBox itemId={item.id} isComplete={item.isComplete} toggleCompletion={(id) => this.props.complete(id)} />
-						<Text style={styles.listItemText}>{item.title}</Text>
-					</TouchableOpacity>
-				);
-			} else {
-				return (
-					<TouchableOpacity onPress={() => navigate('ListView', { listId: item.id, list: item })} style={styles.listItemContainer}>
-						<Text style={styles.listItemText}>{item.title}</Text>
-					</TouchableOpacity>
-				);
+		const renderListItem = ({ item, index }) => {
+			if (item.listId === this.props.listId) {
+				if (this.props.isItems) {
+					return (
+						<TouchableOpacity onPress={() => navigate('ListItemView', { listId: item.id, listItem: item })} style={styles.listItemContainer}>
+							<CheckBox item={item} itemId={item.id} index={index} />
+							<Text style={styles.listItemText}>{item.title}</Text>
+						</TouchableOpacity>
+					);
+				} else {
+					return (
+						<TouchableOpacity onPress={() => navigate('ListView', { listId: item.id, list: item })} style={styles.listItemContainer}>
+							<Text style={styles.listItemText}>{item.title}</Text>
+						</TouchableOpacity>
+					);
+				}
 			}
 		};
+
 		return (
 			<>
 				{this.props.isItems ? (
-					<FlatList
-						contentContainerStyle={styles.listContainer}
-						renderItem={renderListItem}
-						data={this.props.listItems.filter((item) => item.listId === this.props.listId)}
-						keyExtractor={(item) => item.id.toString()}
-					/>
+					<FlatList contentContainerStyle={styles.listContainer} data={this.props.listItems} renderItem={renderListItem} keyExtractor={(item, index) => item.id.toString()} />
 				) : (
 					<FlatList contentContainerStyle={styles.listContainer} renderItem={renderListItem} data={this.props.listData} keyExtractor={(item) => item.id.toString()} />
 				)}

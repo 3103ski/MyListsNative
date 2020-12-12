@@ -13,6 +13,7 @@ import { fetchLists, fetchListItems } from '../redux/actions/listActions';
 // View Components
 import AllLists from './views/AllLists';
 import ListView from './views/ListView';
+import ListItemView from './views/ListItemView';
 
 // Components
 
@@ -26,7 +27,7 @@ const AllListsNavigator = createStackNavigator(
 		AllLists: {
 			screen: AllLists,
 			navigationOptions: ({ navigation }) => ({
-				headerLeft: <Icon name='list' type='font-awesome' onPress={() => navigation.toggleDrawer()} />,
+				headerLeft: <Icon name='list' type='font-awesome' onPress={() => navigation.toggleDrawer()} style={{ marginLeft: 10 }} color={'white'} />,
 				headerTitle: 'All Lists',
 			}),
 		},
@@ -34,6 +35,12 @@ const AllListsNavigator = createStackNavigator(
 			screen: ListView,
 			navigationOptions: ({ navigation }) => ({
 				initialRouteName: 'All Lists',
+			}),
+		},
+		ListItemView: {
+			screen: ListItemView,
+			navigationOptions: ({ navigation }) => ({
+				initialRouteName: 'Item Details',
 			}),
 		},
 	},
@@ -59,7 +66,7 @@ const CustomDrawerContentComponent = (props) => {
 						<Text style={styles.drawerHeaderText}>My Lists App</Text>
 					</View>
 				</View>
-				<DrawerItems {...props} />
+				<DrawerItems {...props} labelStyle={styles.label} />
 			</SafeAreaView>
 		</ScrollView>
 	);
@@ -70,12 +77,12 @@ const MainNavigator = createDrawerNavigator(
 		Lists: {
 			screen: AllListsNavigator,
 			navigationOptions: {
-				drawerIcon: ({ tintColor }) => <Icon name='clipboard' type='font-awesome' size={24} color={tintColor} />,
+				drawerIcon: ({ tintColor }) => <Icon name='clipboard' type='font-awesome' size={24} color={'black'} />,
 			},
 		},
 	},
 	{
-		drawerBackgroundColor: '#CEC8FF',
+		drawerBackgroundColor: 'white',
 		contentComponent: CustomDrawerContentComponent,
 	}
 );
@@ -117,7 +124,7 @@ const styles = StyleSheet.create({
 	},
 	drawerHeader: {
 		backgroundColor: 'black',
-		height: 140,
+		height: 80,
 		alignItems: 'center',
 		justifyContent: 'center',
 		flex: 1,
@@ -127,11 +134,15 @@ const styles = StyleSheet.create({
 		color: '#fff',
 		fontSize: 24,
 		fontWeight: 'bold',
+		marginLeft: 10,
 	},
 	drawerImage: {
 		margin: 10,
 		height: 60,
 		width: 60,
+	},
+	label: {
+		color: 'black',
 	},
 });
 

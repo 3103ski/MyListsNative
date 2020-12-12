@@ -93,7 +93,7 @@ export const fetchListItemsStart = () => {
 };
 
 export const fetchListItemsSuccess = (listItems) => {
-	console.log(listItems);
+	// console.log(listItems);
 	return {
 		type: a.FETCH_LIST_ITEMS_SUCCESS,
 		listItems: listItems,
@@ -129,9 +129,29 @@ export const addListItemError = (errorMsg) => ({
 });
 
 //****************************************** */
-// 			TOGGLE ITEM COMPLETION
+// 			ITEM DETAILS
 //****************************************** */
 export const toggleCompletion = (itemId) => ({
 	type: a.TOGGLE_COMPLETE,
 	itemId: itemId,
 });
+
+export const updateItemDetails = (updatedItem) => {
+	console.log('update action');
+	return {
+		type: a.UPDATE_ITEM_DETAILS,
+		updatedItem: updatedItem,
+	};
+};
+
+export const refreshList = () => {
+	console.log('in actions refresh');
+	return {
+		type: a.REFRESH_LIST,
+	};
+};
+
+export const completed = (id) => (dispatch) => {
+	dispatch(toggleCompletion(id));
+	dispatch(refreshList());
+};

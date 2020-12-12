@@ -19,8 +19,8 @@ const config = {
 export const ConfigureStore = () => {
 	const store = createStore(persistCombineReducers(config, { app, list }), applyMiddleware(thunk));
 
-	// const persistor = persistStore(store);
+	const persistor = persistStore(store);
 
-	return { store };
-	// return { persistor, store };
+	// return { store };
+	return { persistor, store };
 };
